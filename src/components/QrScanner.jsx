@@ -18,10 +18,32 @@ export default function QrScanner({ onResult, onError }) {
 
     // Hold the startup promise so cleanup can wait for it. Tearing down while
     // start() is still in flight would otherwise leave the camera track live.
+    // Prefer the rear camera on phones, but fall back to whatever exists —
+    // a laptop has no "environment" camera, and demanding one yields a stream
+    // the decoder cannot read.
+    const preferRear = { facingMode: { ideal: 'environment' } }
+
+    // Size the scan box to the video, so a code anywhere in frame is examined.
+    // A fixed box misses codes held outside it on a wide laptop webcam.
+    const qrbox = (w, h) => {
+      const edge = Math.floor(Math.min(w, h) * 0.75)
+      return { width: edge, height: edge }
+    }
+
     const started = scanner
       .start(
-        { facingMode: 'environment' },
-        { fps: 10, qrbox: { width: 220, height: 220 } },
+        preferRear,
+        {
+          fps: 15,
+          qrbox,
+          // Let the browser pick its best resolution; a sharper frame decodes
+          // small or slightly blurry codes far more reliably.
+          videoConstraints: {
+            facingMode: { ideal: 'environment' },
+            width: { ideal: 1280 },
+            height: { ideal: 720 },
+          },
+        },
         (decoded) => {
           if (doneRef.current) return
           doneRef.current = true

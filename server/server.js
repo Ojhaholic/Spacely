@@ -1,4 +1,7 @@
+import { existsSync } from 'node:fs'
 import { networkInterfaces } from 'node:os'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 import express from 'express'
 import classroomsRouter from './routes/classrooms.js'
 import facultyRouter from './routes/faculty.js'
@@ -63,6 +66,18 @@ app.use('/api/faculty', facultyRouter)
 app.use('/api/scan', scanRouter)
 
 app.use('/api', (_req, res) => res.status(404).json({ success: false, error: 'NOT_FOUND' }))
+
+// Serve the built frontend (npm run build) from the same origin as the API, so
+// the client's /api paths work in production without CORS or a proxy.
+const DIST = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'dist')
+if (existsSync(DIST)) {
+  app.use(express.static(DIST))
+  // Client routes (/terminal, /admin) are rendered by React, so any non-API
+  // GET falls back to index.html and survives a direct load or refresh.
+  app.get(/^\/(?!api\/).*/, (_req, res) => res.sendFile(path.join(DIST, 'index.html')))
+} else {
+  console.warn('[spacely] no dist/ found — run "npm run build" to serve the frontend')
+}
 
 // Never leak a stack trace to the client; log the detail for development.
 app.use((err, _req, res, _next) => {
