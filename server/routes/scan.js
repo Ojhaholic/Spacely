@@ -2,6 +2,7 @@ import { Router } from 'express'
 import { randomUUID } from 'node:crypto'
 import { mutate, readJson, writeJson } from '../services/store.js'
 import { broadcast } from '../services/realtime.js'
+import { normalizeFacultyId } from '../services/facultyId.js'
 
 const router = Router()
 
@@ -12,9 +13,7 @@ const router = Router()
 router.post('/', async (req, res, next) => {
   try {
     const roomId = String(req.body?.roomId || '').trim()
-    const facultyId = String(req.body?.facultyId || '')
-      .trim()
-      .toUpperCase()
+    const facultyId = normalizeFacultyId(req.body?.facultyId)
 
     if (!roomId || !facultyId)
       return res.status(400).json({ success: false, error: 'INVALID_REQUEST' })

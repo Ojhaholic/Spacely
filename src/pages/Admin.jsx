@@ -277,6 +277,7 @@ export default function Admin() {
             { name: 'name', label: 'Name', placeholder: 'Demo Faculty' },
             { name: 'facultyId', label: 'Faculty ID', placeholder: '24SCSE1010531' },
           ]}
+          note="Letters and digits only. Spaces and dashes are removed automatically, and this must match the QR code exactly."
           onSubmit={submitFaculty}
           onClose={() => setFacultyForm(null)}
         />
@@ -358,8 +359,15 @@ function RecordForm({ title, initial, fields, note, onSubmit, onClose }) {
 
         {note && <p className="mt-4 text-[12px] leading-relaxed text-ink-faint">{note}</p>}
         {error && (
-          <p className="mt-4 rounded border border-rust/30 bg-rust/[0.05] px-3.5 py-2.5 text-[13px] text-rust">
-            {error}
+          <p
+            role="alert"
+            className="mt-4 flex gap-2 rounded border-2 border-rust bg-rust/[0.08] px-3.5 py-3 text-[13px] font-medium text-rust"
+          >
+            <span aria-hidden="true">✕</span>
+            <span>
+              <strong className="block">Not saved</strong>
+              {error}
+            </span>
           </p>
         )}
 

@@ -2,6 +2,7 @@ import { Router } from 'express'
 import { randomUUID } from 'node:crypto'
 import { mutate, readJson } from '../services/store.js'
 import { broadcast } from '../services/realtime.js'
+import { normalizeFacultyId } from '../services/facultyId.js'
 
 const router = Router()
 
@@ -17,9 +18,9 @@ function validate(body, { partial = false } = {}) {
   } else if (!partial) errors.push('name is required')
 
   if (has('facultyId')) {
-    const facultyId = String(body.facultyId).trim().toUpperCase()
+    const facultyId = normalizeFacultyId(body.facultyId)
     if (!/^[A-Z0-9]{4,32}$/.test(facultyId))
-      errors.push('facultyId must be 4-32 letters or digits')
+      errors.push('Faculty ID must be 4-32 letters or digits (spaces and dashes are ignored)')
     else out.facultyId = facultyId
   } else if (!partial) errors.push('facultyId is required')
 
