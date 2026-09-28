@@ -1,0 +1,73 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+  /* Surfaces — warm off-white, not pure white */
+  --color-paper: #f7f7f5;
+  --color-paper-raised: #ffffff;
+  --color-paper-sunk: #f1f1ee;
+
+  /* Lines */
+  --color-line: #e2e2dd;
+  --color-line-soft: #ebebe6;
+  --color-line-strong: #d3d3cc;
+
+  /* Text */
+  --color-ink: #17181a;
+  --color-ink-dim: #6b6f75;
+  --color-ink-faint: #85898f;
+
+  /* Accent — deepened lime so it holds contrast on light */
+  --color-lime: #4a7c0a;
+  --color-lime-bright: #84cc16;
+  --color-lime-wash: #f2f8e7;
+  --color-rust: #b45309;
+}
+
+@layer base {
+  html {
+    background-color: var(--color-paper);
+  }
+
+  body {
+    margin: 0;
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection {
+    background-color: var(--color-lime-bright);
+    color: var(--color-ink);
+  }
+}
+
+@utility label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  line-height: 1;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+/* Faint technical grid behind the page — static, no animation. */
+@utility grid-bg {
+  background-image:
+    linear-gradient(to right, rgba(23, 24, 26, 0.028) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(23, 24, 26, 0.028) 1px, transparent 1px);
+  background-size: 56px 56px;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
