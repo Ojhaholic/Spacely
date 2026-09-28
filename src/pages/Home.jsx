@@ -57,35 +57,57 @@ export default function Home() {
   const selectedRoom = rooms.find((r) => r.id === selected) || null
 
   return (
-    <div className="grid-bg min-h-screen">
-      <header className="sticky top-0 z-20 border-b border-line bg-paper/85 backdrop-blur-sm">
-        <div className="mx-auto flex max-w-[1320px] items-center justify-between px-6 py-4 lg:px-10">
-          <div className="flex items-baseline gap-3.5">
-            <span className="font-mono text-[15px] font-medium tracking-[0.02em] text-ink">
-              SPACELY
+    <div className="campus-bg min-h-screen">
+      {/* University band — names the institution before the product. */}
+      <div className="bg-brand text-white">
+        <div className="mx-auto flex max-w-[1320px] items-center justify-between gap-3 px-5 py-2 lg:px-10">
+          <p className="label text-white/80">Galgotias University · Greater Noida</p>
+          <p className="label hidden text-white/55 sm:block">Campus Space Intelligence</p>
+        </div>
+      </div>
+
+      <header className="sticky top-0 z-20 border-b border-line bg-paper/90 backdrop-blur-md">
+        <div className="mx-auto flex max-w-[1320px] items-center justify-between gap-3 px-5 py-3.5 lg:px-10">
+          <div className="flex items-center gap-3">
+            <span className="grid size-9 shrink-0 place-items-center rounded-lg bg-brand font-display text-[17px] font-bold text-white shadow-[0_2px_8px_rgba(11,43,92,0.28)]">
+              S
             </span>
-            <span className="label hidden text-ink-faint sm:inline">
-              Campus Space / Galgotias University
+            <span className="leading-tight">
+              <span className="block font-display text-[17px] font-bold tracking-[-0.01em] text-brand">
+                Spacely
+              </span>
+              <span className="label block text-ink-faint">Find a free room</span>
             </span>
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2.5 sm:gap-4">
             <TerminalLink />
             <LivePill connected={connected} />
           </div>
         </div>
       </header>
 
-      <main className="mx-auto max-w-[1320px] px-6 lg:px-10">
+      <main className="mx-auto max-w-[1320px] px-5 lg:px-10">
         {/* ── Hero ─────────────────────────────── */}
-        <section className="relative overflow-hidden border-b border-line-soft pt-11 pb-9">
-          <h1 className="text-[30px] leading-tight font-medium tracking-[-0.02em] text-ink md:text-[34px]">
-            Find an empty classroom.
+        <section className="relative overflow-hidden border-b border-line-soft pt-9 pb-8 sm:pt-12 sm:pb-10">
+          <span className="inline-flex items-center gap-2 rounded-full border border-brand/15 bg-brand-soft px-3 py-1.5">
+            <span className="size-1.5 rounded-full bg-gold" />
+            <span className="label text-brand">Live classroom availability</span>
+          </span>
+
+          <h1 className="mt-5 font-display text-[34px] leading-[1.05] font-extrabold tracking-[-0.03em] text-brand sm:text-[46px] lg:text-[56px]">
+            Find an empty
+            <br className="hidden sm:block" />{' '}
+            <span className="bg-gradient-to-r from-lime-bright to-lime bg-clip-text text-transparent">
+              classroom.
+            </span>
           </h1>
-          <p className="mt-3 max-w-[46ch] text-[14px] leading-relaxed text-ink-dim">
+
+          <p className="mt-4 max-w-[46ch] text-[15px] leading-relaxed text-ink-dim sm:text-[16px]">
             See what&rsquo;s available across campus before you start walking.
           </p>
-          <p className="mt-6 flex items-center gap-2.5">
+
+          <p className="mt-6 flex flex-wrap items-center gap-x-2.5 gap-y-1.5">
             <span className="relative flex size-[5px]">
               {connected && (
                 <span className="absolute inline-flex size-full animate-ping rounded-full bg-lime-bright opacity-60" />
@@ -150,12 +172,10 @@ export default function Home() {
         </section>
 
         {/* ── Summary ──────────────────────────── */}
-        <section className="flex items-stretch gap-10 border-y border-line-soft py-4">
-          <Stat label="Available Now" value={availableCount} tone="lime" loading={status === 'loading'} />
-          <div className="w-px bg-line-soft" />
-          <Stat label="Occupied" value={occupiedCount} loading={status === 'loading'} />
-          <div className="w-px bg-line-soft" />
-          <Stat label="Total Rooms" value={rooms.length} loading={status === 'loading'} />
+        <section className="grid max-w-[620px] grid-cols-3 gap-2.5 py-5 sm:gap-3.5">
+          <Stat label="Free" value={availableCount} tone="lime" loading={status === 'loading'} />
+          <Stat label="Occupied" value={occupiedCount} tone="rust" loading={status === 'loading'} />
+          <Stat label="Total" value={rooms.length} tone="brand" loading={status === 'loading'} />
         </section>
 
         {/* ── Grid ─────────────────────────────── */}
@@ -188,7 +208,7 @@ export default function Home() {
           )}
 
           {status === 'ready' && visible.length > 0 && (
-            <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            <div className="grid grid-cols-2 gap-2.5 sm:gap-3.5 lg:grid-cols-3 xl:grid-cols-4">
               {visible.map((room) => (
                 <ClassroomCard
                   key={room.id}
@@ -202,8 +222,8 @@ export default function Home() {
           )}
         </section>
 
-        <footer className="flex flex-wrap items-center justify-between gap-3 border-t border-line py-8">
-          <span className="font-mono text-[12px] tracking-[0.02em] text-ink-dim">SPACELY</span>
+        <footer className="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-line bg-paper-raised px-5 py-5 mb-8">
+          <span className="font-display text-[14px] font-bold text-brand">Spacely</span>
           <span className="label text-ink-faint">Prototype // Galgotias University</span>
           <span className="label text-ink-faint">DESIGNOVA 2026</span>
         </footer>
@@ -238,18 +258,24 @@ function LivePill({ connected }) {
   )
 }
 
+const STAT_TONE = {
+  lime: { box: 'border-lime/25 bg-lime-wash', dot: 'bg-lime-bright', num: 'text-lime' },
+  rust: { box: 'border-rust/20 bg-rust/[0.06]', dot: 'bg-rust', num: 'text-rust' },
+  brand: { box: 'border-brand/15 bg-brand-soft', dot: 'bg-brand-mid', num: 'text-brand' },
+}
+
 function Stat({ label, value, tone, loading }) {
+  const t = STAT_TONE[tone] || STAT_TONE.brand
   return (
-    <div>
-      <p className="label text-ink-faint">{label}</p>
+    <div className={`rounded-xl border p-3.5 sm:p-4 ${t.box}`}>
+      <p className="flex items-center gap-1.5">
+        <span className={`size-1.5 rounded-full ${t.dot}`} />
+        <span className="label whitespace-nowrap text-ink-dim">{label}</span>
+      </p>
       {loading ? (
-        <span className="mt-2 block h-[22px] w-9 animate-pulse rounded bg-line" />
+        <span className="mt-2.5 block h-8 w-12 animate-pulse rounded bg-line" />
       ) : (
-        <p
-          className={`mt-1.5 font-mono text-[22px] leading-none ${
-            tone === 'lime' ? 'text-lime' : 'text-ink-dim'
-          }`}
-        >
+        <p className={`mt-1.5 font-display text-[28px] leading-none font-bold sm:text-[34px] ${t.num}`}>
           {value}
         </p>
       )}
